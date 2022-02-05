@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="align-center">
+  <h3 id="map">Map</h3>
+  <table>
+    <thead>
+      <tr>
+        <th data-label="Field">Field</th>
+        <th data-label="Details">Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="Field">Start</td>
+        <td data-label="Details">{{directions.origin}}</td>      
+      </tr>
+      <tr>
+        <td data-label="Field">Destination</td>
+        <td data-label="Details">{{directions.destination}}</td>      
+      </tr>
+      <tr>
+        <td data-label="Field">Duration</td>
+        <td data-label="Details">{{directions.duration}}</td>      
+      </tr>
+      <tr>
+        <td data-label="Field">Distance</td>
+        <td data-label="Details">{{directions.distance}}</td>      
+      </tr>
+      <tr>
+        <td data-label="Field">Directions</td>
+        <td data-label="Details" id="dir-toggle">click <a href="javascript:void(0)" onclick="DirectionsToggle()">here</a></td>      
+      </tr>
+    </tbody>
+  </table>
+
+  <table id="dir-table" hidden>
+    <thead>
+      <tr>
+        <th>Directions</th>
+        <th>Distance</th>
+        <th>Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for leg in directions.route %}
+          <tr>
+          <td data-label="#">Leg {{ forloop.counter }}</td>
+          <td></td>
+          <td></td>  
+        </tr>
+        {% for dist, dur, text in leg.steps %}
+        <tr>
+          <td data-label="Direction">{{text|safe}}</td>
+          <td data-label="Distance">{{dist}}</td>
+          <td data-label="Duration">{{dur}}</td>   
+        </tr>
+        {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+
+<div class="map-container">
+  <div id="map-route"></div>
+</div>
+
+<script type="text/javascript">
+
+    const google_api_key = "{{google_api_key|safe}}";
+    const lat_a = parseFloat("{{lat_a|safe}}");
+    const long_a = parseFloat("{{long_a|safe}}");
+    const lat_b = parseFloat("{{lat_b|safe}}");
+    const long_b = parseFloat("{{long_b|safe}}");
+    const lat_c = parseFloat("{{lat_c|safe}}");
+    const long_c = parseFloat("{{long_c|safe}}");
+    const lat_d = parseFloat("{{lat_d|safe}}");
+    const long_d = parseFloat("{{long_d|safe}}");
+    const origin = "{{origin|safe}}";
+    const destination = "{{destination|safe}}";
+    const directions = {{directions|safe}}
+    console.log(directions)
+
+</script>
+
+<script src="{% static 'js/googleapi/google_maps.js' %}"></script>
+
+{% endblock %}

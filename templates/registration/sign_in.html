@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="align-center">
+
+  <form class="form-signin" id="signinform" method="POST" action="/sign-in">
+    {% csrf_token %}
+    <div class="user-box">
+      <input type="text" name="username" id="inputUsername" required autocorrect="off" spellcheck="false" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+      <span></span>
+      <label>Username</label>
+    </div>
+
+    <div class="user-box">
+      <input type="password" class="password" name="password" id="inputPassword" required autocorrect="off" spellcheck="false" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+      <span></span>
+      <label >Password</label>
+    </div>
+
+    <label class="check-container">Show Password
+     <input type="checkbox" onclick="showPword()">
+     <span class="checkmark"></span>
+   </label>
+
+   <div class="login-button-container">
+      <button class="registration-button">
+          <div class="neon-button-login-form" type="submit">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          Sign in
+          </div>
+      </button>
+    </div>
+ </form>
+
+</div>
+
+{% endblock %}

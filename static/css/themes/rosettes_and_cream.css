@@ -1,0 +1,16 @@
+:root {
+    --text-color: black;
+    --text-color-hover: black;
+    --primary-color: #EF7C8E;
+    --primary-color-light: #FAE8E0;
+    --secondary-color: #B6E2D3;
+    --secondary-color-light: #D8A7B1;
+    --tertiary-color: #ffd5de;
+    --navbar-background-color: rgba(0, 0, 0, 0.5);
+    --navbar-hover-over-items: rgba(0, 0, 0, 0.7);
+    --navbar-text-color: #D8A7B1;
+    --form-background: rgba(0, 0, 0, 0.4);
+    --form-and-table-borders: white;
+    --mobile-navabar-burger-button-color: #fff;
+    --table-and-form-box-shadow: rgba(0, 0, 0, 0.7);
+}

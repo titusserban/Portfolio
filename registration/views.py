@@ -1,0 +1,128 @@
+from django.shortcuts import render, redirect, reverse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth import login, logout, authenticate
+from django.conf import settings
+from django.http import JsonResponse
+from django.views.generic.edit import FormView
+from django.views.generic.base import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from ProjectCoreDjango.mixins import (
+	AjaxFormMixin, 
+	recaptcha_validation,
+	form_errors,
+	redirect_params,
+	)
+
+from .forms import (
+	UserForm,
+	UserProfileForm,
+	AuthForm,
+	)
+
+# Default messages and results for form errors
+result = "Error"
+message = "There was an error, please try again"
+
+
+# Basic template view for user account
+class AccountView(LoginRequiredMixin, TemplateView):
+	template_name = "registration/account.html"
+
+
+# Function view to allow users to update their profile
+def profile_view(request):
+	user = request.user
+	user_profile = user.userprofile
+
+	form = UserProfileForm(instance = user_profile) 
+
+	if request.is_ajax():
+		form = UserProfileForm(data = request.POST, instance = user_profile)
+		if form.is_valid():
+			obj = form.save()
+			obj.has_profile = True
+			obj.save()
+			result = "Success"
+			message = "Your profile has been updated"
+		else:
+			message = form_errors(form)
+		data = {'result': result, 'message': message}
+		return JsonResponse(data)
+
+	else:
+		context = {'form': form}
+		context['google_api_key'] = settings.GOOGLE_API_KEY
+		context['base_country'] = settings.BASE_COUNTRY
+
+		return render(request, 'registration/profile.html', context)
+
+
+# Generic FormView for user sign-up with reCAPTCHA security
+class SignUpView(AjaxFormMixin, FormView):
+
+	template_name = "registration/sign_up.html"
+	form_class = UserForm
+	success_url = "/"
+
+	# reCAPTURE key required in context
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context["recaptcha_site_key"] = settings.RECAPTCHA_PUBLIC_KEY
+		return context
+
+	# Overwrite the mixin logic to get, check and save reCAPTURE score
+	def form_valid(self, form):
+		response = super(AjaxFormMixin, self).form_valid(form)	
+		if self.request.is_ajax():
+			token = form.cleaned_data.get('token')
+			captcha = recaptcha_validation(token)
+			if captcha["success"]:
+				obj = form.save()
+				obj.email = obj.username
+				obj.save()
+				user_profile = obj.userprofile
+				user_profile.captcha_score = float(captcha["score"])
+				user_profile.save()
+				
+				login(self.request, obj, backend='django.contrib.auth.backends.ModelBackend')
+
+				#change result & message on success
+				result = "Success"
+				message = "Thank you for signing up"
+
+			data = {'result': result, 'message': message}
+			return JsonResponse(data)
+
+		return response
+
+
+# Generic FormView with AjaxFormMixin for user sign-in
+class SignInView(AjaxFormMixin, FormView):
+
+	template_name = "registration/sign_in.html"
+	form_class = AuthForm
+	success_url = "/"
+
+	def form_valid(self, form):
+		response = super(AjaxFormMixin, self).form_valid(form)	
+		if self.request.is_ajax():
+			username = form.cleaned_data.get('username')
+			password = form.cleaned_data.get('password')
+			#attempt to authenticate user
+			user = authenticate(self.request, username=username, password=password)
+			if user is not None:
+				login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+				result = "Success"
+				message = 'You are now logged in'
+			else:
+				message = form_errors(form)
+			data = {'result': result, 'message': message}
+			return JsonResponse(data)
+		return response
+
+
+def sign_out(request):
+	logout(request)
+	return redirect(reverse('registration:sign-in'))

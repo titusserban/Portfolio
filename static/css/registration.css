@@ -1,0 +1,250 @@
+/* Registration */
+
+.form-signin {
+  display: flex;
+  flex-direction: column;
+  padding: 4rem 2rem 4rem 2rem;
+  margin: auto;
+}
+
+.form-signin .user-box {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+  border-bottom: 0.125rem solid white;
+}
+
+.user-box input {
+  color: white;
+  width: 100%;
+  padding: 0 0.35rem;
+  height: 2.5rem;
+  font-size: 1.5rem;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.user-box label {
+  position: absolute;
+  top: 50%;
+  left: 0.35rem;
+  color: white;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.user-box span::before {
+  content: "";
+  position: absolute;
+  top: 2.5rem;
+  left: 0;
+  width: 0%;
+  height: 0.125rem;
+  background: #03e9f4;
+  transition: 0.5s;
+}
+
+.user-box input:focus ~ label,
+.user-box input:valid ~ label {
+  top: -1.2rem;
+  color: #03e9f4;
+}
+
+.user-box input:focus ~ span::before,
+.user-box input:valid ~ span::before {
+  width: 100%;
+}
+
+.registration-text {
+  color: #8ef6fd;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.registration-text:hover {
+  color: #00eeff;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  margin-top: 2rem;
+}
+
+.registration-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* End of Registration */
+
+/* Login neon button */
+
+.neon-button-login-form {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  color: #03e9f4;
+  font-size: 1.2rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  overflow: hidden;
+  transition: 0.5s;
+  letter-spacing: 0.25rem;
+}
+
+.neon-button-login-form:hover {
+  background: #03e9f4;
+  color: #fff;
+  border-radius: 0.3rem;
+  box-shadow: 0 0 0.3rem #03e9f4, 0 0 1rem #03e9f4, 0 0 2rem #03e9f4,
+    0 0 3rem #03e9f4;
+}
+
+.neon-button-login-form span {
+  position: absolute;
+  display: block;
+}
+
+.neon-button-login-form span:nth-child(1) {
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 0.125rem;
+  background: linear-gradient(90deg, transparent, #03e9f4);
+  animation: btn-anim1 1s linear infinite;
+}
+
+.neon-button-login-form span:nth-child(2) {
+  top: -100%;
+  right: 0;
+  width: 0.125rem;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, #03e9f4);
+  animation: btn-anim2 1s linear infinite;
+  animation-delay: 0.25s;
+}
+
+.neon-button-login-form span:nth-child(3) {
+  bottom: 0;
+  right: -100%;
+  width: 100%;
+  height: 0.125rem;
+  background: linear-gradient(270deg, transparent, #03e9f4);
+  animation: btn-anim3 1s linear infinite;
+  animation-delay: 0.5s;
+}
+
+.neon-button-login-form span:nth-child(4) {
+  bottom: -100%;
+  left: 0;
+  width: 0.125rem;
+  height: 100%;
+  background: linear-gradient(360deg, transparent, #03e9f4);
+  animation: btn-anim4 1s linear infinite;
+  animation-delay: 0.75s;
+}
+
+@keyframes btn-anim1 {
+  0% {
+    left: -100%;
+  }
+  50%,
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes btn-anim2 {
+  0% {
+    top: -100%;
+  }
+  50%,
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes btn-anim3 {
+  0% {
+    right: -100%;
+  }
+  50%,
+  100% {
+    right: 100%;
+  }
+}
+
+@keyframes btn-anim4 {
+  0% {
+    bottom: -100%;
+  }
+  50%,
+  100% {
+    bottom: 100%;
+  }
+}
+
+/* End of Login neon button */
+
+/* Text notifications for password reset */
+
+.text-notification {
+  border-collapse: collapse;
+  font-size: 1rem;
+  flex-shrink: 1;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  max-width: 35rem;
+  color: white;
+}
+
+/* End of Text notifications for password reset */
+
+.check-container {
+  color: white;
+  width: 100%;
+  padding: 0 0.35rem;
+  height: 2.5rem;
+  font-size: 1.2rem;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.check-container input[type="checkbox"] {
+  min-width: 1.2rem;
+  min-height: 1.2rem;
+  cursor: pointer;
+  width: 100%;
+}
