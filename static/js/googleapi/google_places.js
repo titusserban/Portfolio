@@ -5,7 +5,7 @@ $.getScript( "https://maps.googleapis.com/maps/api/js?key=" + google_api_key + "
 
 let autocomplete;
 
-function initAutoComplete(){
+const initAutoComplete = () => {
    autocomplete = new google.maps.places.Autocomplete(
        document.getElementById('id-google-address'),
        {
@@ -17,18 +17,18 @@ function initAutoComplete(){
 }
 
 
-function onPlaceChanged (){
+const onPlaceChanged = () => {
 
-    var place = autocomplete.getPlace();
+    let place = autocomplete.getPlace();
 
-    var geocoder = new google.maps.Geocoder()
-    var address = document.getElementById('id-google-address').value
+    let geocoder = new google.maps.Geocoder()
+    let address = document.getElementById('id-google-address').value
 
     geocoder.geocode( { 'address': address}, function(results, status) {
 
         if (status == google.maps.GeocoderStatus.OK) {
-            var latitude = results[0].geometry.location.lat();
-            var longitude = results[0].geometry.location.lng();
+            let latitude = results[0].geometry.location.lat();
+            let longitude = results[0].geometry.location.lng();
 
             $('#id_longitude').val(longitude) 
             $('#id_latitude').val(latitude) 
@@ -40,14 +40,14 @@ function onPlaceChanged (){
     }
     else{
         
-        for (var i = 0; i < place.address_components.length; i++) {
-            for (var j = 0; j < place.address_components[i].types.length; j++) {
+        for (let i = 0; i < place.address_components.length; i++) {
+            for (let j = 0; j < place.address_components[i].types.length; j++) {
 
                 if (place.address_components[i].types[j] == "street_number") {
-                    var num = place.address_components[i].long_name  
+                    let num = place.address_components[i].long_name  
                 }
                 if (place.address_components[i].types[j] == "route") {
-                    var addy = place.address_components[i].long_name
+                    let addy = place.address_components[i].long_name
                 }
                 if (place.address_components[i].types[j] == "postal_town") {
                      $('#id_town').val(place.address_components[i].long_name)   
@@ -67,7 +67,7 @@ function onPlaceChanged (){
         $('#id_address').val(num + " " + addy)
 
         //find all hidden inputs & ignore csrf token
-        var x = $( "input:hidden" );
+        let x = $( "input:hidden" );
         for (let i = 0; i < x.length; i++){
             if (x[i].name != "csrfmiddlewaretoken")  
             x[i].type = "text"; 

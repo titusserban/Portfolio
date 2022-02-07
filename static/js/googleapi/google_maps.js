@@ -1,7 +1,6 @@
 $.getScript( "https://maps.googleapis.com/maps/api/js?key=" + google_api_key + "&libraries=places") 
 .done(function( script, textStatus ) {
     google.maps.event.addDomListener(window, "load", initMap)
-
 })
 
 
@@ -34,10 +33,7 @@ const calculateAndDisplayRoute = (directionsService, directionsDisplay) => {
     }, function(response, status) {
       if (status === 'OK') {
         directionsDisplay.setDirections(response);
-
-
       } else {
-
         alert('Directions request failed due to ' + status);
         window.location.assign("/route")
       }

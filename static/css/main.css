@@ -1,3 +1,9 @@
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
 html {
   min-width: fit-content;
 }
@@ -33,6 +39,11 @@ body {
   100% {
     background-position: 0 50%;
   }
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
 
 .align-center {
@@ -267,11 +278,9 @@ nav ul li select option {
     align-items:center;
     justify-content:center;
     text-align: center;
-    box-sizing: border-box;
   }
 
   .primary-navigation {
-    box-sizing: border-box;
     position: fixed;
     z-index: 1000;
     inset: 0 0 0 30%;
@@ -314,7 +323,6 @@ nav ul li select option {
 
   .dataTables_wrapper {
     max-width: 95vw;
-    box-sizing: border-box;
     min-width: fit-content;
   }
 
@@ -324,7 +332,6 @@ nav ul li select option {
     word-wrap: break-word;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     max-width: 95vw;
     max-width: fit-content;
   }
@@ -342,7 +349,6 @@ nav ul li select option {
   table td {
     display: block;
     width: 100%;
-    box-sizing: border-box;
   }
 
   .dataTable tr,
@@ -356,7 +362,6 @@ nav ul li select option {
     padding-left: 50%;
     position: relative;
     max-width: 500rem;
-    box-sizing: border-box;
   }
 
   .dataTable td::before,
@@ -369,7 +374,6 @@ nav ul li select option {
     font-weight: bold;
     text-align: center;
     border-right: 0.2rem solid var(--form-and-table-borders);
-    box-sizing: border-box;
   }
 
   .dataTable th,
@@ -401,6 +405,7 @@ nav ul li select option {
 
 /* Form styling */
 
+.input-style,
 form {
   border-collapse: collapse;
   flex-shrink: 1;
@@ -542,7 +547,6 @@ form .form-content-container .input-field .material-icons {
 }
 
 #display-image-name {
-  box-sizing: border-box;
   max-width: 10rem;
   word-break: break-word;
 }
@@ -561,7 +565,6 @@ form .form-content-container .input-field .material-icons {
   align-items: center;
   justify-content: center;
   text-align: center;
-  box-sizing: border-box;
 }
 
 .dataTable,
@@ -575,7 +578,6 @@ table {
   border-collapse: collapse;
   max-width: 95vw;
   margin-bottom: 1rem;
-  box-sizing: border-box;
 }
 
 .dataTable thead tr,
@@ -980,7 +982,6 @@ td a .material-icons:hover {
 
 tfoot {
   background: var(--primary-color);
-  box-sizing:border-box;
 }
 
 tfoot tr th input {
@@ -993,22 +994,10 @@ tfoot tr th input:focus {
   border: 1px solid var(--primary-color-light);
 }
 
-tfoot tr {
-  box-sizing:border-box;
-}
-
-tfoot tr th {
-  box-sizing:border-box;
-}
-
-tfoot tr th input {
-  width: 100%;
-  box-sizing:border-box;
-}
-
 .map-container {
   height: 100%;
   max-width: 500px;
+  max-height: 500px;
   margin-left:auto; 
   margin-right:auto;
   box-shadow: 0 0 0.5rem var(--table-and-form-box-shadow);
@@ -1020,11 +1009,27 @@ tfoot tr th input {
 
 .input-style {
   font-size: 1.5rem;
+  color:#fff;
 }
 
 .input-style input {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   font-size: 1.2rem;
-  min-width: 35vw;
+  min-width: 30vw;
+  border-radius: 0.5rem;
+  border: 0.1rem solid var(--primary-color);
 }
 
+.input-style input:focus {
+  outline: none !important;
+  border: 0.1rem solid var(--primary-color);
+  box-shadow: 0 0 0.7rem var(--primary-color);
+}
+
+.input-style label {
+  margin-bottom: .5rem;
+}
+
+#dir-table {
+  min-width: 50vw;
+}

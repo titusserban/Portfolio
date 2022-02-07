@@ -9,17 +9,17 @@ from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from ProjectCoreDjango.mixins import (
-	AjaxFormMixin, 
-	recaptcha_validation,
-	form_errors,
-	redirect_params,
-	)
+									  AjaxFormMixin, 
+									  recaptcha_validation,
+									  form_errors,
+									  redirect_params,
+									  )
 
 from .forms import (
-	UserForm,
-	UserProfileForm,
-	AuthForm,
-	)
+					UserForm,
+					UserProfileForm,
+					AuthForm,
+					)
 
 # Default messages and results for form errors
 result = "Error"
@@ -30,6 +30,8 @@ message = "There was an error, please try again"
 class AccountView(LoginRequiredMixin, TemplateView):
 	template_name = "registration/account.html"
 
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 # Function view to allow users to update their profile
 def profile_view(request):
@@ -38,7 +40,7 @@ def profile_view(request):
 
 	form = UserProfileForm(instance = user_profile) 
 
-	if request.is_ajax():
+	if is_ajax(request=request):
 		form = UserProfileForm(data = request.POST, instance = user_profile)
 		if form.is_valid():
 			obj = form.save()
@@ -75,27 +77,27 @@ class SignUpView(AjaxFormMixin, FormView):
 	# Overwrite the mixin logic to get, check and save reCAPTURE score
 	def form_valid(self, form):
 		response = super(AjaxFormMixin, self).form_valid(form)	
-		if self.request.is_ajax():
-			token = form.cleaned_data.get('token')
-			captcha = recaptcha_validation(token)
-			if captcha["success"]:
-				obj = form.save()
-				obj.email = obj.username
-				obj.save()
-				user_profile = obj.userprofile
-				user_profile.captcha_score = float(captcha["score"])
-				user_profile.save()
-				
-				login(self.request, obj, backend='django.contrib.auth.backends.ModelBackend')
 
-				#change result & message on success
-				result = "Success"
-				message = "Thank you for signing up"
+		token = form.cleaned_data.get('token')
+		captcha = recaptcha_validation(token)
+		if captcha["success"]:
+			obj = form.save()
+			obj.email = obj.username
+			obj.save()
+			user_profile = obj.userprofile
+			user_profile.captcha_score = float(captcha["score"])
+			user_profile.save()
+			
+			login(self.request, obj, backend='django.contrib.auth.backends.ModelBackend')
 
-			data = {'result': result, 'message': message}
-			return JsonResponse(data)
+			#change result & message on success
+			result = "Success"
+			message = "Thank you for signing up"
 
-		return response
+		data = {'result': result, 'message': message}
+		return JsonResponse(data)
+
+
 
 
 # Generic FormView with AjaxFormMixin for user sign-in

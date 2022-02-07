@@ -1,0 +1,137 @@
+{% extends 'base.html' %} {% load static %} {% block extend_head %}
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}" />
+{% endblock %} {% block content %}
+
+<!-- Intro -->
+
+<section class="intro" id="home">
+  <h1 class="section__title section__title--intro">
+    Hi, I am <strong>TS</strong>
+  </h1>
+  <p class="section__subtitle section__subtitle--intro">Developer</p>
+  <img
+    src="{% static 'homepage/photo.jpg' %}"
+    alt="My picture"
+    class="intro__img"
+  />
+</section>
+
+<!-- My services -->
+<section class="my-services" id="services">
+  <div class="darker">
+    <h2 class="section__title selection__title--services">What I do</h2>
+    <div class="services">
+      <div class="service">
+        <h3></h3>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam sit
+          autem illo porro voluptatum optio, voluptatibus harum non iste dolore
+          sint, unde numquam explicabo possimus corrupti, sequi iusto placeat
+          accusamus!
+        </p>
+      </div>
+
+      <div class="service">
+        <h3></h3>
+        <p>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perferendis
+          alias minima cum blanditiis, accusamus hic, soluta quidem consectetur
+          quod, placeat asperiores aspernatur amet porro inventore beatae
+          dolorum odit error adipisci.
+        </p>
+      </div>
+
+      <div class="service">
+        <h3></h3>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit officia
+          nam aliquam recusandae amet dignissimos consequuntur consequatur
+          accusamus est modi facilis iure laudantium, ratione praesentium
+          accusantium libero eius quia nisi.
+        </p>
+      </div>
+    </div>
+
+    <a href="#" class="button-tertiary">My work</a>
+  </div>
+</section>
+
+<!-- About me -->
+<section class="about-me" id="about">
+  <h2 class="section__title section__title--about">Who I am</h2>
+  <p class="section__subtitle section__subtitle--about">Something about me</p>
+
+  <div class="about-me__body">
+    <p>
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facere fuga
+      maxime distinctio quaerat laborum repudiandae officiis officia porro
+      voluptates. Ex eos neque distinctio delectus dicta, nihil sint adipisci
+      esse harum!
+    </p>
+    <p>
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti qui
+      tenetur mollitia blanditiis minus sapiente error tempore harum dolor vel?
+      Maiores praesentium dolor fuga perferendis tempore dolorum corporis, culpa
+      deserunt.
+    </p>
+  </div>
+
+  <img src="#" alt="My image" class="about-me__img" />
+</section>
+
+<!-- My work -->
+<section class="my-work" id="work">
+  <h2 class="section__title section__title--work">My work</h2>
+  <p class="section__subtitle section__subtitle--work">
+    A selection of my range of work
+  </p>
+  <div class="portfolio">
+    <a href="#" class="portfolio__item">
+      <img
+        src="{% static 'homepage/photo.jpg' %}"
+        alt="Portfolio item"
+        class="portfolio__img"
+      />
+    </a>
+    <a href="#" class="portfolio__item">
+      <img
+        src="{% static 'homepage/photo.jpg' %}"
+        alt="Portfolio item"
+        class="portfolio__img"
+      />
+    </a>
+    <a href="#" class="portfolio__item">
+      <img
+        src="{% static 'homepage/photo.jpg' %}"
+        alt="Portfolio item"
+        class="portfolio__img"
+      />
+    </a>
+    <a href="#" class="portfolio__item">
+      <img
+        src="{% static 'homepage/photo.jpg' %}"
+        alt="Portfolio item"
+        class="portfolio__img"
+      />
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <a href="mailto:test@test.com" class="footer__link">test@test.com</a>
+  <ul class="social-list">
+    <li class="social-list__item">
+      <a href="#" class="social-list__link">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+    <li>
+      <a href="#" class="social-list__link">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  </ul>
+</footer>
+
+{% endblock %}

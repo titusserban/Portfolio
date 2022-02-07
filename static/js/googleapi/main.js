@@ -43,8 +43,8 @@ function ShowAlert(title, message, type, redirect){
    
 };
 
-const showPword = () => {
-  const x = document.getElementsByClassName("password");
+function showPword() {
+  var x = document.getElementsByClassName("password");
   for (let i = 0; i < x.length; i++){
       if (x[i].type === "password") {
         x[i].type = "text";
@@ -68,6 +68,8 @@ function CustomFormSubmitResponse(e){
 };
 
 
+
+"use strict";
 var FormControls = function () {
 
     var usersignup = function () {
