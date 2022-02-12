@@ -4,6 +4,6 @@ from googleapi import views
 app_name = "googleapi"
 
 urlpatterns = [
-    path('route', views.Route.as_view(), name="route"),
+    path('', views.Route.as_view(), name="route"),
     path('map', views.map, name="map"),
 ]

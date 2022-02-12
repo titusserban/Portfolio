@@ -6,7 +6,10 @@
     
     <div class="input-style align-center">
 
-        <h2>Routing configuration</h2>
+        <h2>Route configuration</h2>
+        <h5>Please enter a start address, two waypoints and a destination address.</br>
+            Once all fields are completed, you will be redirected.
+        </h5>
 
         <label for="id-google-address-a">Start Address</label>
         <input type="text" placeholder="*Begin typing address" id="id-google-address-a" name="google_address_a">
@@ -19,6 +22,13 @@
 
         <label for="id-google-address-b">Destination Address</label>
         <input type="text" placeholder="*Begin typing address" id="id-google-address-b" name="google_address_b">
+
+        <a href="https://github.com/titusserban/Portfolio/blob/master/static/js/googleapi/google_places_waypoints.js" target="_blank">
+            <h5>Click here to view the JavaScript code <i class="fab fa-github"></i></h5>
+        </a>
+        <a href="https://github.com/titusserban/Portfolio/blob/master/googleapi/views.py" target="_blank">
+            <h5>Click here to view the Django Views <i class="fab fa-github"></i></h5>
+        </a>
 
         <input type="hidden" class="geo" id="id-lat-a" value="">
         <input type="hidden" class="geo" id="id-long-a" value="">

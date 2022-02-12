@@ -17,10 +17,12 @@
 //     })
 // })
 
+
 const activePage = window.location.pathname;
 const navLinks = document.querySelectorAll('nav ul li a').forEach(link => {
-  if(link.href.includes(`${activePage}`)){
+  if (link.href.includes(`${activePage}`) && (`${activePage}`).length > 3){
     link.classList.add('active-nav-item');
-  }
+  } 
+  
 })
 

@@ -3,7 +3,6 @@
 {% block content %}
 
 <div class="align-center">
-  <h3 id="map">Map</h3>
   <table>
     <thead>
       <tr>
@@ -13,11 +12,11 @@
     </thead>
     <tbody>
       <tr>
-        <td data-label="Field">Start</td>
+        <td data-label="Field">Start coordinates</td>
         <td data-label="Details">{{directions.origin}}</td>      
       </tr>
       <tr>
-        <td data-label="Field">Destination</td>
+        <td data-label="Field">Destination coordinates</td>
         <td data-label="Details">{{directions.destination}}</td>      
       </tr>
       <tr>
@@ -30,7 +29,7 @@
       </tr>
       <tr>
         <td data-label="Field">Directions</td>
-        <td data-label="Details" id="dir-toggle">click <a href="javascript:void(0)" onclick="DirectionsToggle()">here</a></td>      
+        <td data-label="Details" id="dir-toggle">click <a href="javascript:void(0)" onclick="DirectionsToggle()">HERE</a></td>      
       </tr>
     </tbody>
   </table>
@@ -68,6 +67,17 @@
   <div id="map-route"></div>
 </div>
 
+<div class="align-center">
+  <div class="input-style align-center">
+      <a href="https://github.com/titusserban/Portfolio/blob/master/static/js/googleapi/google_maps.js" target="_blank">
+          <h5>Click here to view the JavaScript code <i class="fab fa-github"></i></h5>
+      </a>
+      <a href="https://github.com/titusserban/Portfolio/blob/master/googleapi/views.py" target="_blank">
+          <h5>Click here to view the Django Views <i class="fab fa-github"></i></h5>
+      </a>
+    </div>
+</div>
+
 <script type="text/javascript">
 
     const google_api_key = "{{google_api_key|safe}}";
@@ -82,7 +92,6 @@
     const origin = "{{origin|safe}}";
     const destination = "{{destination|safe}}";
     const directions = {{directions|safe}}
-    console.log(directions)
 
 </script>
 

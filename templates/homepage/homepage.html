@@ -52,7 +52,7 @@
       </div>
     </div>
 
-    <a href="#" class="button-tertiary">My work</a>
+    <a href="#work" class="button-tertiary">My work</a>
   </div>
 </section>
 
@@ -81,39 +81,70 @@
 
 <!-- My work -->
 <section class="my-work" id="work">
-  <h2 class="section__title section__title--work">My work</h2>
-  <p class="section__subtitle section__subtitle--work">
-    A selection of my range of work
-  </p>
-  <div class="portfolio">
-    <a href="#" class="portfolio__item">
-      <img
-        src="{% static 'homepage/photo.jpg' %}"
-        alt="Portfolio item"
-        class="portfolio__img"
-      />
-    </a>
-    <a href="#" class="portfolio__item">
-      <img
-        src="{% static 'homepage/photo.jpg' %}"
-        alt="Portfolio item"
-        class="portfolio__img"
-      />
-    </a>
-    <a href="#" class="portfolio__item">
-      <img
-        src="{% static 'homepage/photo.jpg' %}"
-        alt="Portfolio item"
-        class="portfolio__img"
-      />
-    </a>
-    <a href="#" class="portfolio__item">
-      <img
-        src="{% static 'homepage/photo.jpg' %}"
-        alt="Portfolio item"
-        class="portfolio__img"
-      />
-    </a>
+  <div class="darker">
+    <h2 class="section__title section__title--work">My work</h2>
+    <p class="section__subtitle section__subtitle--work">
+      A selection of my range of work
+    </p>
+    <div class="portfolio">
+      <a href="{% url 'googleapi:route' %}" class="portfolio__item">
+        <div class="inner-text">Google maps API project</div>
+        <img
+          src="{% static 'homepage/google_maps.png' %}"
+          alt="Portfolio item"
+          class="portfolio__img"
+        />
+      </a>
+      <a href="#" class="portfolio__item">
+        <img
+          src="{% static 'homepage/photo.jpg' %}"
+          alt="Portfolio item"
+          class="portfolio__img"
+        />
+      </a>
+      <a href="#" class="portfolio__item">
+        <img
+          src="{% static 'homepage/photo.jpg' %}"
+          alt="Portfolio item"
+          class="portfolio__img"
+        />
+      </a>
+      <a href="#" class="portfolio__item">
+        <img
+          src="{% static 'homepage/photo.jpg' %}"
+          alt="Portfolio item"
+          class="portfolio__img"
+        />
+      </a>
+      <a href="#" class="portfolio__item">
+        <img
+          src="{% static 'homepage/photo.jpg' %}"
+          alt="Portfolio item"
+          class="portfolio__img"
+        />
+      </a>
+      <a href="#" class="portfolio__item">
+        <img
+          src="{% static 'homepage/photo.jpg' %}"
+          alt="Portfolio item"
+          class="portfolio__img"
+        />
+      </a>
+      <a href="#" class="portfolio__item">
+        <img
+          src="{% static 'homepage/photo.jpg' %}"
+          alt="Portfolio item"
+          class="portfolio__img"
+        />
+      </a>
+      <a href="#" class="portfolio__item">
+        <img
+          src="{% static 'homepage/photo.jpg' %}"
+          alt="Portfolio item"
+          class="portfolio__img"
+        />
+      </a>
+    </div>
   </div>
 </section>
 
@@ -122,12 +153,12 @@
   <a href="mailto:test@test.com" class="footer__link">test@test.com</a>
   <ul class="social-list">
     <li class="social-list__item">
-      <a href="#" class="social-list__link">
+      <a href="https://github.com/titusserban/Portfolio" target="_blank" class="social-list__link">
         <i class="fab fa-github"></i>
       </a>
     </li>
     <li>
-      <a href="#" class="social-list__link">
+      <a href="#" target="_blank" class="social-list__link">
         <i class="fab fa-linkedin"></i>
       </a>
     </li>

@@ -1,7 +1,9 @@
 {% load static %}
 <div class="primary-header flex">
   <div>
-      <img src="{% static 'css/logo.png' %}" alt="logo" class="logo">
+    <a href="{% url 'homepage' %}">
+      <img src="{% static 'homepage/logo.gif' %}" alt="logo" class="logo">
+    </a>   
   </div>
   
   <div class="mobile-nav-toggle" data-visible="false" aria-controls="primary-navigation" aria-expanded="false">
@@ -14,15 +16,13 @@
     <ul id="primary-navigation" data-visible="false" class="primary-navigation flex">
 
       <li>
-        <a href="{% url 'googleapi:route' %}">Route</a>
+        <a href="{% url 'homepage' %}">Home</a>
       </li>
 
       <li>
-        <a href="{% url 'googleapi:map' %}">Map</a>
+        <a href="{% url 'googleapi:route' %}">Google API Project</a>
       </li>
-
       
-
       <div class="dropdown-container" data-dropdown>
         <button class="flex-row-container" data-dropdown-button>
             Registration ⇩
@@ -31,15 +31,15 @@
         <div class="dropdown-menu-container">
             <ul>
               <li>
-                <a class="active" href="{% url 'registration:sign-in' %}">Sign In</a>
+                <a href="{% url 'registration:sign-in' %}">Sign In</a>
               </li>
 
               <li>
-                <a class="active" href="{% url 'registration:sign-up' %}">Sign Up</a>
+                <a href="{% url 'registration:sign-up' %}">Sign Up</a>
               </li>
 
               <li>
-                <a class="active" href="{% url 'registration:sign-out' %}">Sign Out</a>
+                <a href="{% url 'registration:sign-out' %}">Sign Out</a>
               </li>
 
               <li>
