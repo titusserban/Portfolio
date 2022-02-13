@@ -1,6 +1,9 @@
-{% extends 'base.html' %} {% load static %} {% block extend_head %}
-<link rel="stylesheet" href="{% static 'css/homepage.css' %}" />
-{% endblock %} {% block content %}
+{% extends 'base.html' %} 
+{% load static %} 
+{% block extend_head %}
+  <link rel="stylesheet" href="{% static 'css/homepage.css' %}" />
+{% endblock %} 
+{% block content %}
 
 <!-- Intro -->
 
@@ -88,7 +91,7 @@
     </p>
     <div class="portfolio">
       <a href="{% url 'googleapi:route' %}" class="portfolio__item">
-        <div class="inner-text">Google maps API project</div>
+        <div class="inner-text">Google Maps API project</div>
         <img
           src="{% static 'homepage/google_maps.png' %}"
           alt="Portfolio item"

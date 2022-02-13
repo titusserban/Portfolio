@@ -8,5 +8,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", HomePage.as_view(), name="homepage"),
     path("googleapi/", include("googleapi.urls")),
+    path("openweatherapi/", include("openweatherapi.urls")),
     path("registration/", include("registration.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -44,6 +44,7 @@ def google_directions(*args, **kwargs):
         }
     )
 
+    # Transform the response into a python dictionary
     directions = result.json()
 
 	# Check to see if the response status is OK
@@ -63,6 +64,7 @@ def google_directions(*args, **kwargs):
             # Add to the total duration
             duration += int(routes[route]["duration"]["value"])
 
+            # Details of each route
             route_step = {
                 'origin': routes[route]["start_address"],
                 'destination': routes[route]["end_address"],

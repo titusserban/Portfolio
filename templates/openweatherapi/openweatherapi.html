@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="align-center">
+  <form class="form-signin" method="post">
+    {% csrf_token %}
+    <div class="user-box">
+      <input type="text" name="city" required autocorrect="off" spellcheck="false" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+      <span></span>
+      <label>Please choose a city</label>
+    </div>
+
+    <div class="login-button-container">
+      <button class="registration-button">
+          <div class="neon-button-login-form" type="submit">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          Search
+          </div>
+      </button>
+    </div>
+      
+    {% if country_code and latitude and longitude and temp and pressure and humidity %}
+    
+    <div class="dark-container">
+      <h2>Response</h2>
+      <h4>
+        <span>Country Code : </span>
+        {{country_code}}
+      </h4>
+      <h4>
+        <span>Latitude : </span>
+        {{latitude}}
+      </h4>
+      <h4>
+        <span>Longitude : </span>
+        {{longitude}}
+      </h4>
+      <h4>
+        <span>Temperature : </span>
+        {{temp}}
+      </h4>
+      <h4>
+        <span>Pressure : </span> {{pressure}}
+      </h4>
+      <h4>
+        <span>Humidity : </span>
+        {{humidity}}
+      </h4>
+      <h4 >
+        <span>Forecast : </span> {{main}}
+        <div class="align-center">
+          <img src="http://openweathermap.org/img/w/{{icon}}.png" alt="Image"/>
+        </div>
+      </h4>
+      <h4>
+        <span>Description : </span>
+        {{description}}
+      </h4>
+    </div>
+    {% endif %}
+
+    {% if error_line_1 and error_line_2 %}
+    <div class="dark-container">
+      <div class="align-center">
+        <h2>{{error_line_1}}</h2>
+        <h4>{{error_line_2}}</h4>
+      </div>
+    </div>
+    {% endif %}
+    <br><br>
+     <a href="https://github.com/titusserban/Portfolio/blob/master/openweatherapi/views.py" target="_blank" style="color:white">
+        <h3><i class="fab fa-github"></i> Click here to view the Django Views</h3>
+    </a>
+  </form>
+
+   
+
+</div>
+
+{% endblock %}

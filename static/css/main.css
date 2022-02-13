@@ -204,10 +204,10 @@ nav ul li select option {
 
 .dropdown-menu-container {
   min-width: 20vw;
-  background: var(--navbar-background-color);
+  background: rgba(0, 0, 0, 0.8);
   position: absolute;
   right: 0;
-  top: calc(100% + 1.2rem);
+  top: calc(100% + 3rem);
   padding: .75rem;
   border-radius: 0.5rem;
   opacity: 0;
@@ -1046,6 +1046,7 @@ h2 {
   border-radius: 0.6em;
 }
 
+h3,
 h5 {
   background: rgba(0, 0, 0, 0.5);
   margin-bottom: 0.7em;
@@ -1056,4 +1057,26 @@ h5 {
 
 #dir-table {
   min-width: 50vw;
+}
+
+.dark-container {
+  color: var(--primary-color-light);
+  border-radius: 1em;
+  margin-top:3em;
+}
+
+.dark-container h4 {
+  margin:0.5em;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 0.2em;
+  border-radius: 1em;
+  max-width: 400px;
+}
+
+h4 .align-center img {
+  width: 100px;
+  background:rgba(255, 255, 255, 0.849);
+  border-radius: 1em;
+  box-shadow: 0 0 1.2rem var(--table-and-form-box-shadow);
+  margin: 0.5em;
 }

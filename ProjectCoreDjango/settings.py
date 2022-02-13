@@ -1,4 +1,3 @@
-
 from pathlib import Path
 import os
 from decouple import config
@@ -30,6 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'homepage',
     'registration',
+    'googleapi',
+    'openweatherapi',
 ]
 
 MIDDLEWARE = [
@@ -116,12 +117,6 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn')
 
-GOOGLE_API_KEY = config('GOOGLE_API_KEY')
-
-RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
-
-RECAPTCHA_PRIVATE_KEY = config("RECAPTCHA_PRIVATE_KEY")
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "users:sign-in"
@@ -129,3 +124,12 @@ LOGIN_REDIRECT_URL = "users:account"
 LOGOUT_REDIRECT_URL = "users:sign-in"
 
 BASE_COUNTRY = "RO"
+
+# API Keys
+GOOGLE_API_KEY = config('GOOGLE_API_KEY')
+
+RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
+
+RECAPTCHA_PRIVATE_KEY = config("RECAPTCHA_PRIVATE_KEY")
+
+OPENWEATHER_API_KEY = config("OPENWEATHER_API_KEY")
