@@ -26,7 +26,11 @@
     {% if country_code and latitude and longitude and temp and pressure and humidity %}
     
     <div class="dark-container">
-      <h2>Response</h2>
+      <h2>Response :</h2>
+      <h3>
+        <span>City : </span>
+        {{city}}
+      </h3>
       <h4>
         <span>Country Code : </span>
         {{country_code}}
