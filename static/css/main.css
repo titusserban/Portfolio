@@ -420,6 +420,7 @@ form {
   background: var(--form-background);
   padding: 0 2rem 1rem 2rem;
   width: auto;
+  margin-bottom: 1rem;
 }
 
 .form-content-container {
@@ -444,7 +445,7 @@ form {
 }
 
 .form-content-container:last-of-type {
-  border: 1rem solid var(--primary-color);
+  border-bottom: 0.3rem solid var(--primary-color);
 }
 
 .label-field {

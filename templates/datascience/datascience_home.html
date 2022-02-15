@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="align-center">
+    <form class="mb-3" action="" method="POST">
+        <div class="form-title">Select parameters</div>
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-content-container">
+
+                <div class="label-field">
+                    {{ field.label }}
+                </div>
+
+                <div class="input-field">
+                    {{ field }}
+                </div>
+
+            </div>
+
+            {% for error in field.errors %}
+                <div class="align-center">
+                    <div class="error-div">
+                        <span class="material-icons">
+                            error_outline
+                        </span>
+                        <div class="error-text">
+                        {{ error }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% endfor %}
+
+        <div class="align-center">
+
+            {% if form.non_field_errors %}
+                <div class="error-div">
+                    <span class="material-icons">
+                        error_outline
+                    </span>
+                    <div class="error-text">
+                    {{form.non_field_errors}}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="buttons-container">
+            <button type="submit" class="button-save">
+                Search
+            </button>
+        </div>
+    </form>
+    
+    {% if sales_df %}
+        <h1>Sales DataFrame</h1>
+        {{sales_df|safe}}
+        <h1>Positions DataFrame</h1>
+        {{positions_df|safe}}
+        <h1>Sales & Positions Merged DataFrame</h1>
+        {{merged_df|safe}}
+    {% else %}
+        <h3>No data</h3>
+    {% endif %}
+
+</div>
+{% endblock %}

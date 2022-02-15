@@ -10,4 +10,8 @@ urlpatterns = [
     path("googleapi/", include("googleapi.urls")),
     path("openweatherapi/", include("openweatherapi.urls")),
     path("registration/", include("registration.urls")),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path("datascience/", include("datascience.urls")),
+] 
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -17,4 +17,4 @@ class UserProfile(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return f"{self.user}"
+        return f"User profile of: {self.user.username}"
