@@ -2,11 +2,75 @@
 {% load static %}
 {% block content %}
 
+{% block extend_head %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+{% endblock %}
+
 <div class="align-center">
+
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header align-center">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h2 style="background:var(--primary-color); color:#fff;" id="exampleModalLabel">Add Report</h2>
+                </div>
+                
+                <div id="alert-box"></div>
+                <div class="align-center">
+                    <div class="modal-body" id="modal-body">
+                        <form id="report-form" style="padding-top:1rem;">
+                            {% csrf_token %}
+                            {% for field in report_form %}
+                                <div class="form-content-container">
+
+                                    <div class="label-field">
+                                        {{ field.label }}
+                                    </div>
+
+                                    <div class="input-field">
+                                        {{ field }}
+                                    </div>
+
+                                </div>
+
+                                {% for error in field.errors %}
+                                    <div class="align-center">
+                                        <div class="error-div">
+                                            <span class="material-icons">
+                                                error_outline
+                                            </span>
+                                            <div class="error-text">
+                                            {{ error }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                            {% endfor %}
+                            <div class="buttons-container">
+                                <button type="submit" class="button-save">
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if no_data %}
+        <div class="alert alert-warning" role="alert">
+            {{no_data}}
+        </div>
+
+    {% endif %}
+
     <form class="mb-3" action="" method="POST">
         <div class="form-title">Select parameters</div>
         {% csrf_token %}
-        {% for field in form %}
+        {% for field in search_form %}
             <div class="form-content-container">
 
                 <div class="label-field">
@@ -55,15 +119,35 @@
     </form>
     
     {% if sales_df %}
-        <h1>Sales DataFrame</h1>
+        <h2>Sales DataFrame</h2>
         {{sales_df|safe}}
-        <h1>Positions DataFrame</h1>
+
+        <h2>Positions DataFrame</h2>
         {{positions_df|safe}}
-        <h1>Sales & Positions Merged DataFrame</h1>
+
+        <h2>Sales & Positions Merged DataFrame</h2>
         {{merged_df|safe}}
-    {% else %}
-        <h3>No data</h3>
+
+        <h2 style="margin-bottom:5px;">Grouped By DataFrame</h2>
+        <h3 style="color:#fff; margin-top:5px;">Grouped by "transaction_id" where we aggregate the price</h3>
+        {{groupby_df|safe}}
+
+        <h2>Chart</h2>
+        <img src="data:image/png;base64, {{chart|safe}}" id="img">
+
     {% endif %}
 
+    <div class="buttons-container not-visible" id="report-btn-container">
+        <button type="submit" class="button-cancel" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">
+            Add Report
+        </button>
+    </div>
+
 </div>
+
+<script src="{% static 'js/datascience/main.js' %}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js"></script>
+
 {% endblock %}

@@ -472,6 +472,12 @@ form {
   flex-direction: column;
 }
 
+.input-field .pwa-container,
+.input-field textarea {
+  box-sizing: border-box;
+  max-width: 180px;
+}
+
 .input-field select {
   display: flex;
   justify-content: center;
@@ -1080,4 +1086,8 @@ h4 .align-center img {
   border-radius: 1em;
   box-shadow: 0 0 1.2rem var(--table-and-form-box-shadow);
   margin: 0.5em;
+}
+
+.not-visible {
+  display: none;
 }
