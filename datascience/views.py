@@ -151,9 +151,10 @@ def csv_upload_view(request):
         csv_file = request.FILES.get('file')
         obj, created = CSV.objects.get_or_create(file_name=csv_file_name)
 
+        # check if the object is created 
         if created:
-            obj.csv_file = csv_file
-            obj.save()
+            obj.csv_file = csv_file # create the file object
+            obj.save() # save the file object
             # open the csv file
             with open(obj.csv_file.path, 'r') as f:
                 reader = csv.reader(f)
@@ -161,14 +162,16 @@ def csv_upload_view(request):
                 for row in reader:
                     data = "".join(row) # create a string out of each row
                     data = data.split(';') # remove all ";" and create a new list
-                    data.pop() # remove the last column
+                    data.pop() # remove the last column ( an empty column of the CSV file )
         
+                    # store the values from the CSV file in variables
                     transaction_id = data[1]
                     product = data[2]
                     quantity = int(data[3])
                     customer = data[4]
                     date = parse_date(data[5])
 
+                    # check if the product exists
                     try:
                         product_obj = Product.objects.get(name__iexact=product)
                     except Product.DoesNotExist:
@@ -176,7 +179,7 @@ def csv_upload_view(request):
 
                     if product_obj is not None:
                         customer_obj, _ = Customer.objects.get_or_create(name=customer) 
-                        salesman_obj = UserProfile.objects.get(user=request.user)
+                        salesman_obj = UserProfile.objects.get(user=1)
                         position_obj = Position.objects.create(product=product_obj, quantity=quantity, created=date)
 
                         sale_obj, _ = Sale.objects.get_or_create(transaction_id=transaction_id, customer=customer_obj, salesman=salesman_obj, created=date)
