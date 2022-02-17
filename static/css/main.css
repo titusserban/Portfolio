@@ -272,7 +272,6 @@ nav ul li select option {
   }
 
   .align-center {
-    overflow: hidden;
     max-width: fit-content;
   }
 

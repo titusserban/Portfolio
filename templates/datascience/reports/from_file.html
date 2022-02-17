@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="align-center">
+    <h1>Upload the sales document</h1>
+
+    <div id="alert-box"></div>
+    <form id="my-dropzone" class="dropzone">
+        {% csrf_token %}
+        <div class="fallback">
+            <input name="file" type="file" multiple />
+        </div>
+    </form>
+
+</div>
+
+<script src="{% static 'js/datascience/from_file.js' %}" defer></script>
+
+{% endblock %}

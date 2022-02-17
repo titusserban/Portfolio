@@ -20,26 +20,26 @@ const handleAlerts = (type, msg) => {
 
 
 if (img) {
-    reportBtnContainer.classList.remove("not-visible")
+    reportBtnContainer.classList.remove("not-visible");
 }
 
 
 reportBtn.addEventListener("click", () => {
     // set a boostrap class of 100% width
-    img.setAttribute("class", "w-100") 
+    img.setAttribute("class", "w-100");
     // append the image at the beginning of the form
-    modalBody.prepend(img)
+    modalBody.prepend(img);
 
     reportForm.addEventListener("submit", (e) => {
         // we prevent the form submission 
         e.preventDefault() 
         // form data instantiating 
-        const formData = new FormData()
-        formData.append("csrfmiddlewaretoken", csrf)
-        formData.append("name", reportName.value)
-        formData.append("remarks", reportRemarks.value)
-        formData.append("author", author.value)
-        formData.append("image", img.src)
+        const formData = new FormData();
+        formData.append("csrfmiddlewaretoken", csrf);
+        formData.append("name", reportName.value);
+        formData.append("remarks", reportRemarks.value);
+        formData.append("author", author.value);
+        formData.append("image", img.src);
 
         // AJAX
         $.ajax ({
@@ -57,4 +57,5 @@ reportBtn.addEventListener("click", () => {
         })
     })
 })
+
 

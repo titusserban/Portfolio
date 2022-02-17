@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="align-center">
+    <h1>Reports List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Remarks</th>
+                <th>Author</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Download to PDF</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in object_list %}
+            <tr>
+                {% if obj.image %}
+                    <td><img src="{{obj.image.url}}"></td>
+                {% else %}
+                    <td>No image found</td>
+                {% endif %}
+                <td>{{obj.name}}</td>
+                <td>{{obj.remarks|truncatewords:20}}</td>
+                <td>{{obj.author}}</td>
+                <td>{{obj.created}}</td>
+                <td>{{obj.updated}}</td>
+                <td>
+                    <a href="{% url 'datascience:pdf' obj.pk %}">
+                        Download
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

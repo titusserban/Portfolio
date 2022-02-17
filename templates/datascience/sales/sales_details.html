@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="align-center">
+    <h1>Sale details:</h1>
+
+    <p>{{ object.pk }}</p>
+    <p>{{ object.transaction_id }}</p>
+</div>
+{% endblock %}

@@ -1,9 +1,7 @@
 from django.http import JsonResponse
-from itertools import groupby
-from venv import create
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
-from datascience.models import Sale, Report
+from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView, TemplateView
+from datascience.models import Sale, Report, Product, Position, CSV
 from datascience.forms import SalesSearchForm, ReportForm
 
 from registration.models import UserProfile
@@ -12,6 +10,14 @@ from datascience.models import Customer
 from .utils import get_chart, get_report_image
 
 import pandas as pd
+
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
+import csv
+from django.utils.dateparse import parse_date
 
 def home_view(request):
     
@@ -77,10 +83,10 @@ def home_view(request):
             
             chart = get_chart(chart_type, sales_df, result_by)
             
-            sales_df = sales_df.to_html()
-            positions_df = positions_df.to_html()
-            merged_df = merged_df.to_html()
-            groupby_df = groupby_df.to_html()
+            sales_df = sales_df.to_html(index=False)
+            positions_df = positions_df.to_html(index=False)
+            merged_df = merged_df.to_html(index=False)
+            groupby_df = groupby_df.to_html(index=False)
            
         else:
             no_data = "No data available in this range."
@@ -120,10 +126,86 @@ def create_report_view(request):
 
 class SaleListView(ListView):
     model = Sale
-    template_name = "datascience/sales_list.html"
+    template_name = "datascience/sales/sales_list.html"
     
     
 class SaleDetailView(DetailView):
     model = Sale
-    template_name = "datascience/sales_details.html"
+    template_name = "datascience/sales/sales_details.html"
+
+
+class ReportListView(ListView):
+    model = Report
+    template_name = "datascience/reports/reports_list.html"
+    
+    
+class UploadCsvView(TemplateView):
+    template_name = "datascience/reports/from_file.html"
+    
+    
+def csv_upload_view(request):
+    if request.method == 'POST':
+        # get the file name
+        csv_file_name = request.FILES.get('file').name
+        # get the file
+        csv_file = request.FILES.get('file')
+        obj, created = CSV.objects.get_or_create(file_name=csv_file_name)
+
+        if created:
+            obj.csv_file = csv_file
+            obj.save()
+            # open the csv file
+            with open(obj.csv_file.path, 'r') as f:
+                reader = csv.reader(f)
+                reader.__next__() # skip the first row ( the thead )
+                for row in reader:
+                    data = "".join(row) # create a string out of each row
+                    data = data.split(';') # remove all ";" and create a new list
+                    data.pop() # remove the last column
+        
+                    transaction_id = data[1]
+                    product = data[2]
+                    quantity = int(data[3])
+                    customer = data[4]
+                    date = parse_date(data[5])
+
+                    try:
+                        product_obj = Product.objects.get(name__iexact=product)
+                    except Product.DoesNotExist:
+                        product_obj = None
+
+                    if product_obj is not None:
+                        customer_obj, _ = Customer.objects.get_or_create(name=customer) 
+                        salesman_obj = UserProfile.objects.get(user=request.user)
+                        position_obj = Position.objects.create(product=product_obj, quantity=quantity, created=date)
+
+                        sale_obj, _ = Sale.objects.get_or_create(transaction_id=transaction_id, customer=customer_obj, salesman=salesman_obj, created=date)
+                        sale_obj.positions.add(position_obj)
+                        sale_obj.save()
+                return JsonResponse({'ex': False})
+        else:
+            return JsonResponse({'ex': True})
+
+    return HttpResponse()
+
+def render_pdf_view(request, pk):
+    template_path = 'datascience/reports/pdf.html'
+    obj = get_object_or_404(Report, pk=pk)
+    context = {'obj': obj}
+
+    # Create the Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+
+    # display the pdf
+    response['Content-Disposition'] = 'filename="report.pdf"'
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
 

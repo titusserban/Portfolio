@@ -15,7 +15,7 @@ def get_graph():
     plt.savefig(buffer, format="png")
     # set tge cursor at the beginning of the string
     buffer.seek(0)
-    # retreuive the entire content of the variable
+    # retreive the entire content of the variable
     image_png = buffer.getvalue()
     # encode the image -> this will return the encoded bytes
     graph = base64.b64encode(image_png)
@@ -60,7 +60,7 @@ def get_report_image(data):
     _ , str_image = data.split(";base64")
     # decode the image
     decoded_img = base64.b64decode(str_image)
-    # rename the image
+    # create the image name
     img_name = str(uuid.uuid4())[:10] + '.png'
     
     data = ContentFile(decoded_img, name=img_name)

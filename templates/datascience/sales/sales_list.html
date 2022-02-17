@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="align-center">
+    <h1>Sales List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Total price</th>
+                <th>Customer</th>
+                <th>Salesman</th>
+                <th>Created</th>
+                <th>Updated</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in object_list %}
+            <tr>
+                <td><a href="{{obj.get_absolute_url}}">{{obj.transaction_id}}</a></td>
+                <td>{{obj.total_price}}</td>
+                <td>{{obj.customer}}</td>
+                <td>{{obj.salesman}}</td>
+                <td>{{obj.created}}</td>
+                <td>{{obj.updated}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

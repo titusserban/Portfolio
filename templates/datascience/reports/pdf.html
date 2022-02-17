@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <style>
+    .image {
+        width: 100%;
+        height: auto;
+    }
+  </style>
+</head>
+<body>
+    <h1>{{obj.name}}</h1>
+    <hr>
+    <img src={{obj.image.path}} class="image">
+    <br>
+    <h3>Remarks</h3>
+    <p>{{obj.remarks}}</p>
+    <hr>
+    <p>author: <b>{{obj.author}}</b></p>
+    <p>created: <b>{{obj.created}}</b></p>
+</body>
+</html>
