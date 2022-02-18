@@ -46,7 +46,7 @@ class Sale(models.Model):
     positions = models.ManyToManyField(Position) # the list of positions that we are including in the sale object
     total_price = models.FloatField(blank=True, null=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    salesman = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    salesman = models.CharField(max_length=100, null=True, blank=True)
     created = models.DateTimeField(blank=True, null=True) # blank=True, null=True in order to see them in Django admin
     updated = models.DateTimeField(auto_now=True)
     

@@ -27,6 +27,7 @@ body {
   color: var(--text-color);
   padding: 0;
   margin: 0;
+  overflow-x: hidden;
 }
 
 @keyframes animated-background {
@@ -598,6 +599,10 @@ table thead tr {
   text-align: center;
   font-weight: bold;
   font-size: 1rem;
+}
+
+table thead tr th {
+  text-align: center;
 }
 
 @media (min-aspect-ratio: 3/4.5) {

@@ -1,21 +1,12 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView, TemplateView
-from datascience.models import Sale, Report, Product, Position, CSV
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView
+from datascience.models import Customer, Sale, Report, Product, Position, CSV
 from datascience.forms import SalesSearchForm, ReportForm
-
-from registration.models import UserProfile
-from datascience.models import Customer
-
-from .utils import get_chart, get_report_image
-
+from datascience.utils import get_chart, get_report_image
 import pandas as pd
-
-from django.conf import settings
-from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-
 import csv
 from django.utils.dateparse import parse_date
 
@@ -41,26 +32,23 @@ def home_view(request):
     
         sale_qs = Sale.objects.filter(created__date__lte=to_date, created__date__gte=from_date) # lte = less than or equal, gte = greater than or equal
         
+        no_data = "No data available in this range."
+        
         if len(sale_qs) > 0: 
             # create the sales DataFrame      
             sales_df = pd.DataFrame(sale_qs.values())
 
             positions_data = []
-            
-            def get_salesman_from_id(value):
-                salesman = UserProfile.objects.get(id=value)
-                return salesman.user.username
 
             def get_customer_from_id(value):
                 customer = Customer.objects.get(id=value)
                 return customer
             
             sales_df["customer_id"] = sales_df["customer_id"].apply(get_customer_from_id) # replace the ForeignKey with the customer name
-            sales_df["salesman_id"] = sales_df["salesman_id"].apply(get_salesman_from_id) # replace the ForeignKey with the salesman name
+            sales_df["salesman_id"] = sales_df["salesman"]
             sales_df["created"] = sales_df["created"].apply(lambda x: x.strftime("%m-%d-%Y"))
             sales_df["updated"] = sales_df["updated"].apply(lambda x: x.strftime("%m-%d-%Y"))
             sales_df.rename({'customer_id': 'customer',
-                             'salesman_id': 'salesman',
                              'id': 'sales_id'},
                             axis=1,
                             inplace=True) # inplace=True in order to avoid storing the value in a variable
@@ -87,9 +75,7 @@ def home_view(request):
             positions_df = positions_df.to_html(index=False)
             merged_df = merged_df.to_html(index=False)
             groupby_df = groupby_df.to_html(index=False)
-           
-        else:
-            no_data = "No data available in this range."
+            no_data = None
         
     context = { 
         "search_form": search_form,
@@ -122,26 +108,6 @@ def create_report_view(request):
         return JsonResponse({"msg": "send"})
     
     return JsonResponse({})
-
-
-class SaleListView(ListView):
-    model = Sale
-    template_name = "datascience/sales/sales_list.html"
-    
-    
-class SaleDetailView(DetailView):
-    model = Sale
-    template_name = "datascience/sales/sales_details.html"
-
-
-class ReportListView(ListView):
-    model = Report
-    template_name = "datascience/reports/reports_list.html"
-    
-    
-class UploadCsvView(TemplateView):
-    template_name = "datascience/reports/from_file.html"
-    
     
 def csv_upload_view(request):
     if request.method == 'POST':
@@ -150,26 +116,24 @@ def csv_upload_view(request):
         # get the file
         csv_file = request.FILES.get('file')
         obj, created = CSV.objects.get_or_create(file_name=csv_file_name)
+        
+        csv_exists = {'csv_exists': True}
 
         # check if the object is created 
         if created:
             obj.csv_file = csv_file # create the file object
-            obj.save() # save the file object
+            obj.save() # save the file object in the database
             # open the csv file
             with open(obj.csv_file.path, 'r') as f:
                 reader = csv.reader(f)
                 reader.__next__() # skip the first row ( the thead )
                 for row in reader:
-                    data = "".join(row) # create a string out of each row
-                    data = data.split(';') # remove all ";" and create a new list
-                    data.pop() # remove the last column ( an empty column of the CSV file )
-        
                     # store the values from the CSV file in variables
-                    transaction_id = data[1]
-                    product = data[2]
-                    quantity = int(data[3])
-                    customer = data[4]
-                    date = parse_date(data[5])
+                    transaction_id = row[1]
+                    product = row[2]
+                    quantity = int(row[3])
+                    customer = row[4]
+                    date = parse_date(row[5])
 
                     # check if the product exists
                     try:
@@ -179,16 +143,15 @@ def csv_upload_view(request):
 
                     if product_obj is not None:
                         customer_obj, _ = Customer.objects.get_or_create(name=customer) 
-                        salesman_obj = UserProfile.objects.get(user=1)
+                        salesman_obj = "CSV Upload"
                         position_obj = Position.objects.create(product=product_obj, quantity=quantity, created=date)
 
                         sale_obj, _ = Sale.objects.get_or_create(transaction_id=transaction_id, customer=customer_obj, salesman=salesman_obj, created=date)
                         sale_obj.positions.add(position_obj)
-                        sale_obj.save()
-                return JsonResponse({'ex': False})
-        else:
-            return JsonResponse({'ex': True})
-
+                        sale_obj.save()        
+                    csv_exists = {'csv_exists': False}       
+                return JsonResponse(csv_exists)
+        return JsonResponse(csv_exists)
     return HttpResponse()
 
 def render_pdf_view(request, pk):
@@ -212,3 +175,21 @@ def render_pdf_view(request, pk):
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
 
+
+class SaleListView(ListView):
+    model = Sale
+    template_name = "datascience/sales/sales_list.html"
+    
+    
+class SaleDetailView(DetailView):
+    model = Sale
+    template_name = "datascience/sales/sales_details.html"
+
+
+class ReportListView(ListView):
+    model = Report
+    template_name = "datascience/reports/reports_list.html"
+    
+    
+class UploadCsvView(TemplateView):
+    template_name = "datascience/reports/from_file.html"
