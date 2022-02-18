@@ -1,8 +1,8 @@
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView
 from datascience.models import Customer, Sale, Report, Product, Position, CSV
-from datascience.forms import SalesSearchForm, ReportForm
+from datascience.forms import SalesSearchForm, ReportForm, SaleForm
 from datascience.utils import get_chart, get_report_image
 import pandas as pd
 from django.template.loader import get_template
@@ -30,7 +30,7 @@ def home_view(request):
         chart_type = request.POST.get("chart_type")
         result_by = request.POST.get("result_by")
     
-        sale_qs = Sale.objects.filter(created__date__lte=to_date, created__date__gte=from_date) # lte = less than or equal, gte = greater than or equal
+        sale_qs = Sale.objects.filter(created__date__lte=to_date, created__date__gte=from_date, is_active=True) # lte = less than or equal, gte = greater than or equal
         
         no_data = "No data available in this range."
         
@@ -92,22 +92,6 @@ def home_view(request):
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
-
-def create_report_view(request):
-    if is_ajax(request=request):
-        name = request.POST.get('name')
-        remarks = request.POST.get('remarks')
-        author = request.POST.get('author')
-        image = request.POST.get('image')
-        
-        img = get_report_image(image)
-        
-        # create the Report object
-        Report.objects.create(name=name, remarks=remarks, author=author, image=img)
-        
-        return JsonResponse({"msg": "send"})
-    
-    return JsonResponse({})
     
 def csv_upload_view(request):
     if request.method == 'POST':
@@ -145,8 +129,11 @@ def csv_upload_view(request):
                         customer_obj, _ = Customer.objects.get_or_create(name=customer) 
                         salesman_obj = "CSV Upload"
                         position_obj = Position.objects.create(product=product_obj, quantity=quantity, created=date)
-
-                        sale_obj, _ = Sale.objects.get_or_create(transaction_id=transaction_id, customer=customer_obj, salesman=salesman_obj, created=date)
+                        sale_obj, _ = Sale.objects.get_or_create(transaction_id=transaction_id,
+                                                                 customer=customer_obj,
+                                                                 salesman=salesman_obj,
+                                                                 created=date,
+                                                                 is_active=True)
                         sale_obj.positions.add(position_obj)
                         sale_obj.save()        
                     csv_exists = {'csv_exists': False}       
@@ -176,20 +163,87 @@ def render_pdf_view(request, pk):
     return response
 
 
+# Sales CRUD
 class SaleListView(ListView):
     model = Sale
     template_name = "datascience/sales/sales_list.html"
     
+    def get_queryset(self):
+        return self.model.objects.filter(is_active=True)
+
+
+class CreateSaleView(CreateView):
+    model = Sale
+    form_class = SaleForm
+    template_name = 'datascience/sales/sales_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateSaleView, self).get_form_kwargs()
+        kwargs.update({"pk": None})
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('datascience:sales_list')
+
+
+class UpdateSaleView(UpdateView):
+    model = Sale
+    form_class = SaleForm
+    template_name = 'datascience/sales/sales_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateSaleView, self).get_form_kwargs()
+        kwargs.update({"pk": self.kwargs["pk"]})
+        return kwargs
+
+    def form_valid(self, form):
+        return super(UpdateSaleView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(UpdateSaleView, self).form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('datascience:sales_list')
+
+def delete_sale(request, pk):
+    Sale.objects.filter(id=pk).update(is_active=False)
+    return redirect('datascience:sales_list')
+
     
 class SaleDetailView(DetailView):
     model = Sale
     template_name = "datascience/sales/sales_details.html"
 
 
+# Reports CRD
 class ReportListView(ListView):
     model = Report
     template_name = "datascience/reports/reports_list.html"
     
+    def get_queryset(self):
+        return self.model.objects.filter(is_active=True)
     
+def create_report_view(request):
+    if is_ajax(request=request):
+        name = request.POST.get('name')
+        remarks = request.POST.get('remarks')
+        author = request.POST.get('author')
+        image = request.POST.get('image')
+        
+        img = get_report_image(image)
+        
+        # create the Report object
+        Report.objects.create(name=name, remarks=remarks, author=author, image=img, is_active=True)   
+        return JsonResponse({"msg": "send"})
+    return JsonResponse({})
+
+def delete_report(request, pk):
+    Report.objects.filter(id=pk).update(is_active=False)
+    return redirect('datascience:sales_list')
+  
+  
+ # Upload CSV
 class UploadCsvView(TemplateView):
     template_name = "datascience/reports/from_file.html"
+
+

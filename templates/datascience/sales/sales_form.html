@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="align-center">
+    <form method='POST' style="min-width:50vw;">
+        <div class="form-title">Sales Form</div>
+        {% csrf_token %}
+            {% for field in form %}
+                <div class="form-content-container">
+
+                    <div class="label-field">
+                        {{ field.label }}
+                    </div>
+
+                    <div class="input-field" style="min-width:30vw;">
+                        {{ field }}
+                    </div>
+
+                </div>
+
+                {% for error in field.errors %}
+                    <div class="align-center">
+                        <div class="error-div">
+                            <span class="material-icons">
+                                error_outline
+                            </span>
+                            <div class="error-text">
+                            {{ error }}
+                            </div>
+                        </div>
+                     </div>
+                {% endfor %}
+
+            {% endfor %}
+
+            <div class="align-center">
+
+                {% if form.non_field_errors %}
+                    <div class="error-div">
+                        <span class="material-icons">
+                            error_outline
+                        </span>
+                        <div class="error-text">
+                        {{form.non_field_errors}}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="buttons-container">
+                <button type="submit" class="button-save">
+                    Save
+                </button>
+                <a class="button-cancel" href='{% url "datascience:sales_list" %}'>Cancel</a>
+            </div>
+    </form>
+</div>
+
+{% endblock content %}

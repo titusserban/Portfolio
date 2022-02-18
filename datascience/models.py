@@ -6,6 +6,7 @@ from django.shortcuts import reverse
 
 class Customer(models.Model):
     name = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return str(self.name)
@@ -14,6 +15,7 @@ class Customer(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.FloatField()
+    is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -22,9 +24,10 @@ class Product(models.Model):
 
 
 class Position(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, limit_choices_to={'is_active': True}, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     price = models.FloatField(blank=True, null=True) # the price represents the result of "product" multiplied by "quantity"
+    is_active = models.BooleanField(default=True)
     created = models.DateTimeField(blank=True, null=True) # blank=True, null=True in order to see them in Django admin
     
     def save(self, *args, **kwargs):
@@ -45,8 +48,9 @@ class Sale(models.Model):
     transaction_id = models.CharField(max_length=12, blank=True) # we will create a function to generate it automaticly
     positions = models.ManyToManyField(Position) # the list of positions that we are including in the sale object
     total_price = models.FloatField(blank=True, null=True)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, limit_choices_to={'is_active': True}, on_delete=models.CASCADE)
     salesman = models.CharField(max_length=100, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
     created = models.DateTimeField(blank=True, null=True) # blank=True, null=True in order to see them in Django admin
     updated = models.DateTimeField(auto_now=True)
     
@@ -84,6 +88,7 @@ class Report(models.Model):
     image = models.ImageField(upload_to ="reports", blank=True, null=True)
     remarks = models.TextField()
     author = models.CharField(max_length=100, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

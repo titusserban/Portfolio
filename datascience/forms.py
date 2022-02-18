@@ -1,6 +1,6 @@
 from doctest import DONT_ACCEPT_TRUE_FOR_1
 from django import forms
-from datascience.models import Report
+from datascience.models import Report, Sale
 
 chart_choices = (
     ("#1", "Bar chart"),
@@ -26,3 +26,12 @@ class ReportForm(forms.ModelForm):
         model = Report
         fields = ("name", "remarks", "author")
 
+
+class SaleForm(forms.ModelForm):
+    class Meta:
+        model = Sale
+        fields = ['positions', 'salesman', 'customer']
+
+    def __init__(self, pk, *args, **kwargs):
+        super(SaleForm, self).__init__(*args, **kwargs)
+        self.pk = pk

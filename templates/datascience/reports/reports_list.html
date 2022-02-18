@@ -14,6 +14,7 @@
                 <th>Created</th>
                 <th>Updated</th>
                 <th>Download to PDF</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -30,8 +31,17 @@
                 <td>{{obj.created}}</td>
                 <td>{{obj.updated}}</td>
                 <td>
-                    <a href="{% url 'datascience:pdf' obj.pk %}">
-                        Download
+                    <a style="color:blue" href="{% url 'datascience:pdf' obj.pk %}">
+                        <span class="material-icons">
+                            file_download
+                        </span>
+                    </a>
+                </td>
+                <td>
+                    <a style="color:red" href="{% url 'datascience:delete_report' obj.id %}">
+                        <span class="material-icons">
+                            delete
+                        </span>
                     </a>
                 </td>
             </tr>
