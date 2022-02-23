@@ -3,42 +3,43 @@
 {% block dash %}
 
 <div class="align-center">
-    <h1>Reports List</h1>
+    <div class="buttons-container">
+        <a class="submit-neon" href="{% url 'datascience:position_create' %}">
+            Create Position
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </a>
+    </div>
+    <h1>Product List</h1>
     <table>
         <thead>
             <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Remarks</th>
-                <th>Author</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
                 <th>Created</th>
-                <th>Updated</th>
-                <th>Download to PDF</th>
+                <th>Edit</th>
                 <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             {% for obj in object_list %}
             <tr>
-                {% if obj.image %}
-                    <td><img src="{{obj.image.url}}"></td>
-                {% else %}
-                    <td>No image found</td>
-                {% endif %}
-                <td>{{obj.name}}</td>
-                <td>{{obj.remarks|truncatewords:20}}</td>
-                <td>{{obj.author}}</td>
+                <td>{{obj.product}}</td>
+                <td>{{obj.quantity}}</td>
+                <td>{{obj.price}}</td>
                 <td>{{obj.created}}</td>
-                <td>{{obj.updated}}</td>
                 <td>
-                    <a style="color:blue" href="{% url 'datascience:pdf' obj.id %}">
+                    <a style="color:blue" href="{% url 'datascience:position_update' obj.id %}">
                         <span class="material-icons">
-                            file_download
+                            edit
                         </span>
                     </a>
                 </td>
                 <td>
-                    <a style="color:red" href="{% url 'datascience:delete_report' obj.id %}">
+                    <a style="color:red" href="{% url 'datascience:position_delete' obj.id %}">
                         <span class="material-icons">
                             delete
                         </span>

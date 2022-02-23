@@ -2,13 +2,19 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView
 from datascience.models import Customer, Sale, Report, Product, Position, CSV
-from datascience.forms import SalesSearchForm, ReportForm, SaleForm
+from datascience.forms import SalesSearchForm, ReportForm, SaleForm, CustomerForm, ProductForm, PositionForm
 from datascience.utils import get_chart, get_report_image
 import pandas as pd
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 import csv
 from django.utils.dateparse import parse_date
+
+
+ # Dashboard
+class OverviewView(TemplateView):
+    template_name = "datascience/datascience_overview.html"
+
 
 def home_view(request):
     
@@ -45,7 +51,6 @@ def home_view(request):
                 return customer
             
             sales_df["customer_id"] = sales_df["customer_id"].apply(get_customer_from_id) # replace the ForeignKey with the customer name
-            sales_df["salesman_id"] = sales_df["salesman"]
             sales_df["created"] = sales_df["created"].apply(lambda x: x.strftime("%m-%d-%Y"))
             sales_df["updated"] = sales_df["updated"].apply(lambda x: x.strftime("%m-%d-%Y"))
             sales_df.rename({'customer_id': 'customer',
@@ -105,38 +110,42 @@ def csv_upload_view(request):
 
         # check if the object is created 
         if created:
-            obj.csv_file = csv_file # create the file object
-            obj.save() # save the file object in the database
+            # create the file object
+            obj.csv_file = csv_file 
+            # save the file object in the database
+            obj.save() 
             # open the csv file
             with open(obj.csv_file.path, 'r') as f:
                 reader = csv.reader(f)
-                reader.__next__() # skip the first row ( the thead )
+                # skip the first row ( the thead )
+                reader.__next__()
                 for row in reader:
+                    if len(row) == 6:
                     # store the values from the CSV file in variables
-                    transaction_id = row[1]
-                    product = row[2]
-                    quantity = int(row[3])
-                    customer = row[4]
-                    date = parse_date(row[5])
+                        transaction_id = row[1]
+                        product = row[2]
+                        quantity = int(row[3])
+                        customer = row[4]
+                        date = parse_date(row[5])
 
-                    # check if the product exists
-                    try:
-                        product_obj = Product.objects.get(name__iexact=product)
-                    except Product.DoesNotExist:
-                        product_obj = None
+                        # check if the product exists
+                        try:
+                            product_obj = Product.objects.get(name__iexact=product)
+                        except Product.DoesNotExist:
+                            product_obj = None
 
-                    if product_obj is not None:
-                        customer_obj, _ = Customer.objects.get_or_create(name=customer) 
-                        salesman_obj = "CSV Upload"
-                        position_obj = Position.objects.create(product=product_obj, quantity=quantity, created=date)
-                        sale_obj, _ = Sale.objects.get_or_create(transaction_id=transaction_id,
-                                                                 customer=customer_obj,
-                                                                 salesman=salesman_obj,
-                                                                 created=date,
-                                                                 is_active=True)
-                        sale_obj.positions.add(position_obj)
-                        sale_obj.save()        
-                    csv_exists = {'csv_exists': False}       
+                        if product_obj is not None:
+                            customer_obj, _ = Customer.objects.get_or_create(name=customer) 
+                            salesman_obj = "CSV Upload"
+                            position_obj = Position.objects.create(product=product_obj, quantity=quantity, created=date)
+                            sale_obj, _ = Sale.objects.get_or_create(transaction_id=transaction_id,
+                                                                    customer=customer_obj,
+                                                                    salesman=salesman_obj,
+                                                                    created=date,
+                                                                    is_active=True)
+                            sale_obj.positions.add(position_obj)
+                            sale_obj.save()        
+                        csv_exists = {'csv_exists': False}       
                 return JsonResponse(csv_exists)
         return JsonResponse(csv_exists)
     return HttpResponse()
@@ -239,11 +248,151 @@ def create_report_view(request):
 
 def delete_report(request, pk):
     Report.objects.filter(id=pk).update(is_active=False)
-    return redirect('datascience:sales_list')
+    return redirect('datascience:reports_list')
   
   
  # Upload CSV
 class UploadCsvView(TemplateView):
     template_name = "datascience/reports/from_file.html"
 
+
+# Customer CRUD
+class CustomerListView(ListView):
+    model = Customer
+    template_name = "datascience/customer/customer_list.html"
+    
+    def get_queryset(self):
+        return self.model.objects.filter(is_active=True)
+
+
+class CreateCustomerView(CreateView):
+    model = Customer
+    form_class = CustomerForm
+    template_name = 'datascience/customer/customer_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateCustomerView, self).get_form_kwargs()
+        kwargs.update({"pk": None})
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('datascience:customer_list')
+
+
+class UpdateCustomerView(UpdateView):
+    model = Customer
+    form_class = CustomerForm
+    template_name = 'datascience/customer/customer_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateCustomerView, self).get_form_kwargs()
+        kwargs.update({"pk": self.kwargs["pk"]})
+        return kwargs
+
+    def form_valid(self, form):
+        return super(UpdateCustomerView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(UpdateCustomerView, self).form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('datascience:customer_list')
+
+def delete_customer(request, pk):
+    Customer.objects.filter(id=pk).update(is_active=False)
+    return redirect('datascience:customer_list')
+
+
+# Product CRUD
+class ProductListView(ListView):
+    model = Product
+    template_name = "datascience/product/product_list.html"
+    
+    def get_queryset(self):
+        return self.model.objects.filter(is_active=True)
+
+
+class CreateProductView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'datascience/product/product_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateProductView, self).get_form_kwargs()
+        kwargs.update({"pk": None})
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('datascience:product_list')
+
+
+class UpdateProductView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'datascience/product/product_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateProductView, self).get_form_kwargs()
+        kwargs.update({"pk": self.kwargs["pk"]})
+        return kwargs
+
+    def form_valid(self, form):
+        return super(UpdateProductView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(UpdateProductView, self).form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('datascience:product_list')
+
+def delete_product(request, pk):
+    Product.objects.filter(id=pk).update(is_active=False)
+    return redirect('datascience:product_list')
+
+
+# Position CRUD
+class PositionListView(ListView):
+    model = Position
+    template_name = "datascience/position/position_list.html"
+    
+    def get_queryset(self):
+        return self.model.objects.filter(is_active=True)
+
+
+class CreatePositionView(CreateView):
+    model = Position
+    form_class = PositionForm
+    template_name = 'datascience/position/position_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(CreatePositionView, self).get_form_kwargs()
+        kwargs.update({"pk": None})
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('datascience:position_list')
+
+
+class UpdatePositionView(UpdateView):
+    model = Position
+    form_class = PositionForm
+    template_name = 'datascience/position/position_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdatePositionView, self).get_form_kwargs()
+        kwargs.update({"pk": self.kwargs["pk"]})
+        return kwargs
+
+    def form_valid(self, form):
+        return super(UpdatePositionView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(UpdateProductView, self).form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('datascience:position_list')
+
+def delete_position(request, pk):
+    Position.objects.filter(id=pk).update(is_active=False)
+    return redirect('datascience:position_list')
 

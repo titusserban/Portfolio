@@ -90,8 +90,16 @@
       A selection of my range of work
     </p>
     <div class="portfolio">
+      <a href="{% url 'datascience:datascience_home' %}" class="portfolio__item">
+        <div class="inner-text">Data Science Project</div>
+        <img
+          src="{% static 'homepage/datascience2.jpg' %}"
+          alt="Portfolio item"
+          class="portfolio__img"
+        />
+      </a>
       <a href="{% url 'googleapi:route' %}" class="portfolio__item">
-        <div class="inner-text">Google Maps API project</div>
+        <div class="inner-text">Google Maps API Project</div>
         <img
           src="{% static 'homepage/google_maps.png' %}"
           alt="Google Maps API"
@@ -99,20 +107,14 @@
         />
       </a>
       <a href="{% url 'openweatherapi:openweather' %}" class="portfolio__item">
-        <div class="inner-text">Open Weather API project</div>
+        <div class="inner-text">Open Weather API Project</div>
         <img
           src="{% static 'homepage/openweather.jpg' %}"
           alt="Open Weather API"
           class="portfolio__img"
         />
       </a>
-      <a href="#" class="portfolio__item">
-        <img
-          src="{% static 'homepage/photo.jpg' %}"
-          alt="Portfolio item"
-          class="portfolio__img"
-        />
-      </a>
+      
       <a href="#" class="portfolio__item">
         <img
           src="{% static 'homepage/photo.jpg' %}"

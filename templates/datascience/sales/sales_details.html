@@ -1,6 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'partials/datascience_dashboard.html' %}
 {% load static %}
-{% block content %}
+{% block dash %}
 
 <div class="align-center">
     <h1>Sale details:</h1>
@@ -8,4 +8,4 @@
     <p>{{ object.pk }}</p>
     <p>{{ object.transaction_id }}</p>
 </div>
-{% endblock %}
+{% endblock dash %}

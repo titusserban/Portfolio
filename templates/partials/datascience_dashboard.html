@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="dashboard-container">
+    <aside>
+        <div class="sidebar">
+            <a href="{% url 'datascience:overview' %}">
+                <span class="material-icons">
+                    visibility
+                </span>
+                <div class="dashboard-text">Overview</div>
+            </a>
+
+            <a href="{% url 'datascience:datascience_home' %}">
+                <span class="material-icons">
+                    home
+                </span>
+                <div class="dashboard-text">Home</div>
+            </a>
+
+            <a href="{% url 'datascience:reports_list' %}">
+                <span class="material-icons">
+                    summarize
+                </span>
+                <div class="dashboard-text">Reports table</div>
+            </a>
+
+            <a href="{% url 'datascience:upload_csv' %}">
+                <span class="material-icons">
+                    file_upload
+                </span>
+                <div class="dashboard-text">Upload CSV</div>
+            </a>
+
+            <a href="{% url 'datascience:sales_list' %}">
+                <span class="material-icons">
+                    attach_money
+                </span>
+                <div class="dashboard-text">Sales table</div>
+            </a>
+
+            <a href="{% url 'datascience:customer_list' %}">
+                <span class="material-icons">
+                    groups
+                </span>
+                <div class="dashboard-text">Customers table</div>
+            </a>
+
+            <a href="{% url 'datascience:product_list' %}">
+                <span class="material-icons">
+                    format_list_numbered
+                </span>
+                <div class="dashboard-text">Products table</div>
+            </a>
+
+            <a href="{% url 'datascience:position_list' %}">
+                <span class="material-icons">
+                    grid_4x4
+                </span>
+                <div class="dashboard-text">Positions table</div>
+            </a>
+        </div>
+    </aside>
+    <main>
+        {% block dash %}
+        {% endblock dash %}
+    </main>
+</div>
+
+
+{% endblock %}

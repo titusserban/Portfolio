@@ -3,8 +3,8 @@
 {% block dash %}
 
 <div class="align-center">
-    <form method='POST' style="min-width:50vw;">
-        <div class="form-title">Sales Form</div>
+    <form method='POST'>
+        <div class="form-title">Product Form</div>
         {% csrf_token %}
             {% for field in form %}
                 <div class="form-content-container">
@@ -13,7 +13,7 @@
                         {{ field.label }}
                     </div>
 
-                    <div class="input-field" style="min-width:30vw;">
+                    <div class="input-field">
                         {{ field }}
                     </div>
 
@@ -52,7 +52,7 @@
                 <button type="submit" class="button-save">
                     Save
                 </button>
-                <a class="button-cancel" href='{% url "datascience:sales_list" %}'>Cancel</a>
+                <a class="button-cancel" href='{% url "datascience:product_list" %}'>Cancel</a>
             </div>
     </form>
 </div>

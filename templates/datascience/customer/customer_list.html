@@ -4,24 +4,19 @@
 
 <div class="align-center">
     <div class="buttons-container">
-        <a class="submit-neon" href="{% url 'datascience:sales_create' %}">
-            Create Sale
+        <a class="submit-neon" href="{% url 'datascience:customer_create' %}">
+            Create Customer
             <span></span>
             <span></span>
             <span></span>
             <span></span>
         </a>
     </div>
-    <h1>Sales List</h1>
+    <h1>Customer List</h1>
     <table>
         <thead>
             <tr>
-                <th>Transaction ID</th>
-                <th>Total price</th>
-                <th>Customer</th>
-                <th>Salesman</th>
-                <th>Created</th>
-                <th>Updated</th>
+                <th>Name</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -29,21 +24,16 @@
         <tbody>
             {% for obj in object_list %}
             <tr>
-                <td><a href="{{obj.get_absolute_url}}">{{obj.transaction_id}}</a></td>
-                <td>{{obj.total_price}}</td>
-                <td>{{obj.customer}}</td>
-                <td>{{obj.salesman}}</td>
-                <td>{{obj.created}}</td>
-                <td>{{obj.updated}}</td>
+                <td>{{obj.name}}</td>
                 <td>
-                    <a style="color:blue" href="{% url 'datascience:sales_update' obj.id %}">
+                    <a style="color:blue" href="{% url 'datascience:customer_update' obj.id %}">
                         <span class="material-icons">
                             edit
                         </span>
                     </a>
                 </td>
                 <td>
-                    <a style="color:red" href="{% url 'datascience:sales_delete' obj.id %}">
+                    <a style="color:red" href="{% url 'datascience:customer_delete' obj.id %}">
                         <span class="material-icons">
                             delete
                         </span>

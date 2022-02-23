@@ -1,10 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'partials/datascience_dashboard.html' %}
 {% load static %}
-{% block content %}
 
 {% block extend_head %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
 {% endblock %}
+
+{% block dash %}
 
 <div class="align-center">
 
@@ -13,7 +14,7 @@
             <div class="modal-content">
                 <div class="modal-header align-center">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <h2 style="background:var(--primary-color); color:#fff;" id="exampleModalLabel">Add Report</h2>
+                    <h2 style="background:var(--primary-color); padding:0.5rem; border-radius: 0.5rem; color:#fff;" id="exampleModalLabel">Add Report</h2>
                 </div>
                 
                 <div id="alert-box"></div>
@@ -64,11 +65,11 @@
         <div class="alert alert-warning" role="alert">
             {{no_data}}
         </div>
-
     {% endif %}
 
     <form class="mb-3" action="" method="POST">
-        <div class="form-title">Select parameters</div>
+        <div class="form-title">Select the sales timespan</div>
+        <div class="form-title" style="font-size:16px;">The available timespan is between 02/02/2022 and 02/06/2022</div>
         {% csrf_token %}
         {% for field in search_form %}
             <div class="form-content-container">
@@ -129,25 +130,29 @@
         {{merged_df|safe}}
 
         <h2 style="margin-bottom:5px;">Grouped By DataFrame</h2>
-        <h3 style="color:#fff; margin-top:5px;">Grouped by "transaction_id" where we aggregate the price</h3>
         {{groupby_df|safe}}
 
         <h2>Chart</h2>
         <img src="data:image/png;base64, {{chart|safe}}" id="img">
 
+        <div class="buttons-container not-visible" id="report-btn-container">
+            <button type="submit" class="button-cancel" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">
+                Add Report
+            </button>
+        </div>
     {% endif %}
-
-    <div class="buttons-container not-visible" id="report-btn-container">
-        <button type="submit" class="button-cancel" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">
-            Add Report
-        </button>
-    </div>
-
+     <a style="background-color: rgba(0, 0, 0, 0.5); padding-left: 1rem; padding-right: 1rem; border-radius: 1em; color:#fff; margin-bottom:1rem;"
+        href="https://github.com/titusserban/Portfolio/blob/master/datascience/models.py" target="_blank">
+        <h4><i class="fab fa-github"></i> Click here to view the Django Models</h4>
+    </a>
+    <a style="background-color: rgba(0, 0, 0, 0.5); padding-left: 1rem; padding-right: 1rem; border-radius: 1em; color:#fff;"
+       href="https://github.com/titusserban/Portfolio/blob/master/datascience/views.py" target="_blank">
+        <h4><i class="fab fa-github"></i> Click here to view the Django Views</h4>
+    </a>
 </div>
 
-<script src="{% static 'js/datascience/main.js' %}" defer></script>
-
+<script src="{% static 'js/datascience/main.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js"></script>
 
-{% endblock %}
+{% endblock dash %}
