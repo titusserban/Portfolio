@@ -1,10 +1,15 @@
+from urllib import request
 from django.conf import settings
 from django.shortcuts import redirect
 from urllib.parse import urlencode
 import requests
 import json
 import datetime
-from django.http import JsonResponse, response
+from django.http import JsonResponse
+
+
+def is_ajax(self):
+    return self.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
 def recaptcha_validation(token):
@@ -39,18 +44,14 @@ def form_errors(*args):
 class AjaxFormMixin(object):
     #ajaxify django form
     def form_invalid(self, form):
-        response = super(AjaxFormMixin, self).form_invalid(form)
-        if self.request.is_ajax():
-            message = form_errors(form)
-            return JsonResponse({"result": "Error", "message": message})
-        return response
+        message = form_errors(form)
+        return JsonResponse({"result": "Error", "message": message})
+
 
     def form_valid(self, form):
-        response = super(AjaxFormMixin, self).form_valid(form)
-        if self.request.is_ajax():
-            form.save()
-            return JsonResponse({"result": "Success", "message": ""})
-        return response
+        form.save()
+        return JsonResponse({"result": "Success", "message": ""})
+
 
 
 

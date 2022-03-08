@@ -87,3 +87,10 @@ h4 .align-center img {
 .line {
   color:#fff;
 }
+
+
+.google-bg-img {
+  background-image: url("../homepage/google-bg-img.jpg");
+  background-repeat: no-repeat; 
+  background-size: cover; 
+}

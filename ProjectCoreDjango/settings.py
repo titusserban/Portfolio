@@ -125,8 +125,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "registration:sign-in"
-LOGIN_REDIRECT_URL = "registration:account"
-LOGOUT_REDIRECT_URL = "registration:sign-in"
+LOGIN_REDIRECT_URL = "/registration/"
+LOGOUT_REDIRECT_URL = "/registration/sign-in/"
 
 BASE_COUNTRY = "RO"
 
@@ -138,3 +138,5 @@ RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = config("RECAPTCHA_PRIVATE_KEY")
 
 OPENWEATHER_API_KEY = config("OPENWEATHER_API_KEY")
+
+RECAPTCHA_REQUIRED_SCORE = 0.85

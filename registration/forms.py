@@ -20,15 +20,21 @@ class UserProfileForm(forms.ModelForm):
 
 
 class UserForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = [
-            'first_name',
-            'last_name',
-            'username',
-            'password1',
-            'password2',
-        ]
+	first_name = forms.CharField(max_length=30, required=True)
+	last_name = forms.CharField(max_length=30, required=True)
+	username = forms.EmailField(max_length=254, required=True)
+	password1 = forms.CharField(
+		widget=forms.PasswordInput(attrs={'class':'password'}))
+	password2 = forms.CharField(
+		widget=forms.PasswordInput(attrs={'class':'password'}))
+
+	#reCAPTCHA token
+	token = forms.CharField(
+		widget=forms.HiddenInput())
+
+	class Meta:
+		model = User
+		fields = ('username', 'first_name', 'last_name', 'password1', 'password2', )
 
 
 class AuthForm(AuthenticationForm):

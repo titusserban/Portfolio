@@ -31,8 +31,8 @@ function ShowAlert(title, message, type, redirect){
    
 };
 
-function showPword() {
-  var x = document.getElementsByClassName("password");
+const showPword = () => {
+  let x = document.getElementsByClassName("password");
   for (let i = 0; i < x.length; i++){
       if (x[i].type === "password") {
         x[i].type = "text";
@@ -41,6 +41,8 @@ function showPword() {
       }
   }
 }
+
+
 
 var temp_button_text;
 
@@ -101,7 +103,7 @@ var FormControls = function () {
 
     var usersignin = function (){
         var form = $('#signinform')
-        form.submit(function(event){
+        form.submit(function(event) {
             event.preventDefault();
             CustomFormSubmitPost($('#signinform button[type=submit]'));
             

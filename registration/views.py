@@ -1,3 +1,4 @@
+from urllib import request
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -8,18 +9,11 @@ from django.views.generic.edit import FormView
 from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from ProjectCoreDjango.mixins import (
-									  AjaxFormMixin, 
-									  recaptcha_validation,
-									  form_errors,
-									  redirect_params,
-									  )
+from django.views.generic import CreateView
 
-from .forms import (
-					UserForm,
-					UserProfileForm,
-					AuthForm,
-					)
+from ProjectCoreDjango.mixins import AjaxFormMixin, recaptcha_validation, form_errors
+
+from .forms import UserForm, UserProfileForm, AuthForm
 
 # Default messages and results for form errors
 result = "Error"
@@ -30,8 +24,8 @@ message = "There was an error, please try again"
 class AccountView(LoginRequiredMixin, TemplateView):
 	template_name = "registration/account.html"
 
-def is_ajax(request):
-    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+def is_ajax(self):
+    return self.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 # Function view to allow users to update their profile
 def profile_view(request):
@@ -62,11 +56,10 @@ def profile_view(request):
 
 
 # Generic FormView for user sign-up with reCAPTCHA security
-class SignUpView(AjaxFormMixin, FormView):
+class SignUpView(FormView):
 
 	template_name = "registration/sign_up.html"
 	form_class = UserForm
-	success_url = "/"
 
 	# reCAPTURE key required in context
 	def get_context_data(self, **kwargs):
@@ -74,9 +67,8 @@ class SignUpView(AjaxFormMixin, FormView):
 		context["recaptcha_site_key"] = settings.RECAPTCHA_PUBLIC_KEY
 		return context
 
-	# Overwrite the mixin logic to get, check and save reCAPTURE score
 	def form_valid(self, form):
-		response = super(AjaxFormMixin, self).form_valid(form)	
+		response = super(SignUpView, self).form_valid(form)	
 
 		token = form.cleaned_data.get('token')
 		captcha = recaptcha_validation(token)
@@ -97,7 +89,11 @@ class SignUpView(AjaxFormMixin, FormView):
 		data = {'result': result, 'message': message}
 		return JsonResponse(data)
 
+	def form_invalid(self,form):
+		return super().form_invalid(form)
 
+	def get_success_url(self):
+		return reverse('registration:sign-in')
 
 
 # Generic FormView with AjaxFormMixin for user sign-in
@@ -105,24 +101,21 @@ class SignInView(AjaxFormMixin, FormView):
 
 	template_name = "registration/sign_in.html"
 	form_class = AuthForm
-	success_url = "/"
 
 	def form_valid(self, form):
-		response = super(AjaxFormMixin, self).form_valid(form)	
-		if self.request.is_ajax():
-			username = form.cleaned_data.get('username')
-			password = form.cleaned_data.get('password')
-			#attempt to authenticate user
-			user = authenticate(self.request, username=username, password=password)
-			if user is not None:
-				login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
-				result = "Success"
-				message = 'You are now logged in'
-			else:
-				message = form_errors(form)
-			data = {'result': result, 'message': message}
-			return JsonResponse(data)
-		return response
+		username = form.cleaned_data.get('username')
+		password = form.cleaned_data.get('password')
+		#attempt to authenticate user
+		user = authenticate(self.request, username=username, password=password)
+		if user is not None:
+			login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+			result = "Success"
+			message = 'You are now logged in'
+		else:
+			message = form_errors(form)
+		data = {'result': result, 'message': message}
+		return JsonResponse(data)
+
 
 
 def sign_out(request):

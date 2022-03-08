@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'partials/registration_dashboard.html' %}
 {% load static %}
-{% block content %}
+{% block dash %}
 
 <div class="align-center">
 
-  <form class="form-signin" id="signinform" method="POST" action="/sign-in">
+  <form class="form-signin" id="signinform" method="POST" action="/registration/sign-in">
     {% csrf_token %}
     <div class="user-box">
       <input type="text" name="username" id="inputUsername" required autocorrect="off" spellcheck="false" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
@@ -17,11 +17,14 @@
       <span></span>
       <label >Password</label>
     </div>
+    <br/>
 
-    <label class="check-container">Show Password
-     <input type="checkbox" onclick="showPword()">
-     <span class="checkmark"></span>
-   </label>
+    <div class="flex-row-container">
+      <label class="check-container">Show Password
+      <input style="max-width:2rem;" type="checkbox" onclick="showPword()">
+      <span class="checkmark"></span>
+      </label>
+    </div>
 
    <div class="login-button-container">
       <button class="registration-button">
@@ -38,4 +41,4 @@
 
 </div>
 
-{% endblock %}
+{% endblock dash%}
