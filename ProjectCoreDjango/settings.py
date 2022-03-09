@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'googleapi',
     'openweatherapi',
     'datascience',
+    'to_do_app',
 ]
 
 MIDDLEWARE = [

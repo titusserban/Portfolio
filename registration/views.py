@@ -117,7 +117,6 @@ class SignInView(AjaxFormMixin, FormView):
 		return JsonResponse(data)
 
 
-
 def sign_out(request):
 	logout(request)
 	return redirect(reverse('registration:sign-in'))

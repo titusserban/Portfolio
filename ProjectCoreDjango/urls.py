@@ -11,6 +11,7 @@ urlpatterns = [
     path("openweatherapi/", include("openweatherapi.urls")),
     path("registration/", include("registration.urls")),
     path("datascience/", include("datascience.urls")),
+    path("to_do_app/", include("to_do_app.urls")),
 ] 
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

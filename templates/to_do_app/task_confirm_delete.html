@@ -1,0 +1,22 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block extend_head %}
+  <link rel="stylesheet" href="{% static 'css/to_do_app.css' %}" />
+{% endblock %} 
+{% block content %}
+
+<div class="align-center">
+    <div class="header-bar" style="width:500px">
+    <a href="{% url 'to_do_app:tasks' %}">&#8592;Go Back</a>
+    </div>
+
+    <div class="card-body" style="width:500px">
+    <form method="POST">
+        {% csrf_token %}
+        <p>Are your sure you want to delete this task? "{{task}}"</p>
+        <input class="button" type="submit" value="Delete" />
+    </form>
+    </div>
+</div>
+
+{% endblock content %}

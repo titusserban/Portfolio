@@ -1,0 +1,22 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block extend_head %}
+  <link rel="stylesheet" href="{% static 'css/to_do_app.css' %}" />
+{% endblock %} 
+{% block content %}
+
+<div class="align-center">
+    <div class="header-bar" style="width:500px">
+    <a href="{% url 'to_do_app:tasks' %}">&#8592; Back</a>
+    </div>
+
+    <div class="card-body" style="width:500px">
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input class="button" type="submit" value="Submit" />
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
